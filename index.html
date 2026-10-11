@@ -47,7 +47,7 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15, 23, 42, 0.88);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--card-border);
@@ -77,7 +77,7 @@
     }
 
     .brand-text h1 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       letter-spacing: -0.3px;
     }
@@ -105,7 +105,7 @@
       border: none;
       outline: none;
       border-radius: 20px;
-      padding: 8px 14px;
+      padding: 7px 13px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
@@ -334,12 +334,6 @@
       color: white;
     }
 
-    .btn-edit {
-      background: var(--secondary-bg);
-      color: var(--text-color);
-      border: 1px solid var(--card-border);
-    }
-
     .btn-dismiss {
       background: rgba(239, 68, 68, 0.15);
       color: #f87171;
@@ -350,7 +344,37 @@
       transform: scale(0.97);
     }
 
-    /* Bottom Navigation */
+    .empty-state {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 36px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .empty-icon {
+      font-size: 42px;
+      margin-bottom: 4px;
+    }
+
+    .empty-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .empty-desc {
+      font-size: 13px;
+      color: var(--hint-color);
+      max-width: 280px;
+      line-height: 1.45;
+    }
+
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -415,10 +439,8 @@
 </head>
 <body>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="toast">✨ Scan completed!</div>
+  <div id="toast" class="toast">✨ Inbox up to date!</div>
 
-  <!-- Header -->
   <header>
     <div class="brand">
       <div class="brand-icon">⚡</div>
@@ -432,164 +454,48 @@
     </button>
   </header>
 
-  <!-- Filter Tabs -->
   <div class="tab-bar">
-    <div class="tab-chip active" onclick="filterTab('all', this)">All (3)</div>
-    <div class="tab-chip" onclick="filterTab('high', this)">🚨 High Urgency (1)</div>
-    <div class="tab-chip" onclick="filterTab('med', this)">⚠️ Follow-ups (1)</div>
-    <div class="tab-chip" onclick="filterTab('low', this)">💬 Routine (1)</div>
+    <div class="tab-chip active" onclick="filterTab('all', this)" id="tab-all">All</div>
+    <div class="tab-chip" onclick="filterTab('high', this)" id="tab-high">🚨 Urgent</div>
+    <div class="tab-chip" onclick="filterTab('med', this)" id="tab-med">⚠️ Follow-up</div>
+    <div class="tab-chip" onclick="filterTab('low', this)" id="tab-low">💬 Routine</div>
   </div>
 
-  <!-- Main Feed -->
-  <div class="container" id="feedContainer">
-
-    <!-- Overview Stats -->
+  <div class="container" id="mainContainer">
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-number" style="color: #f87171;">1</div>
+        <div class="stat-number" id="stat-urgent" style="color: #f87171;">0</div>
         <div class="stat-label">Urgent Alert</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number" style="color: #38bdf8;">2</div>
+        <div class="stat-number" id="stat-drafted" style="color: #38bdf8;">0</div>
         <div class="stat-label">AI Drafted</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number" style="color: #10b981;">100%</div>
+        <div class="stat-number" id="stat-rate" style="color: #10b981;">100%</div>
         <div class="stat-label">Triage Rate</div>
       </div>
     </div>
 
-    <!-- Card 1: Urgent Buyer / Client Inquiry -->
-    <div class="thread-card" data-priority="high" id="card-1">
-      <div class="thread-header">
-        <div class="contact-info">
-          <div class="avatar">
-            TZ
-            <div class="avatar-badge"></div>
-          </div>
-          <div>
-            <div class="contact-name">Tanvir Zaman (Marketplace)</div>
-            <div class="contact-time">12 mins ago &bull; In stock inquiry</div>
-          </div>
-        </div>
-        <div class="urgency-badge urgency-high">🚨 High Priority</div>
-      </div>
-
-      <div class="message-bubble">
-        "Hi Arshad! Is the M2 MacBook Pro still available? Can I pick it up tonight if I pay cash?"
-      </div>
-
-      <div class="draft-box">
-        <div class="draft-label">✍️ Proposed Reply</div>
-        <div class="draft-text" contenteditable="true" id="reply-1">
-          "Hey Tanvir, yes it's still available! Tonight works great for pickup. What time were you thinking?"
-        </div>
-      </div>
-
-      <div class="action-row">
-        <button class="btn-action btn-approve" onclick="approveReply('card-1', 'Tanvir Zaman')">
-          ✅ Approve & Send
-        </button>
-        <button class="btn-action btn-dismiss" onclick="dismissReply('card-1')">
-          ❌ Dismiss
-        </button>
-      </div>
-    </div>
-
-    <!-- Card 2: Personal / Family -->
-    <div class="thread-card" data-priority="med" id="card-2">
-      <div class="thread-header">
-        <div class="contact-info">
-          <div class="avatar" style="background: #4f46e5;">
-            AM
-            <div class="avatar-badge"></div>
-          </div>
-          <div>
-            <div class="contact-name">Ammu ❤️</div>
-            <div class="contact-time">25 mins ago &bull; Family</div>
-          </div>
-        </div>
-        <div class="urgency-badge urgency-med">⚠️ Medium</div>
-      </div>
-
-      <div class="message-bubble">
-        "Basha e kokhon ashba? Rater khabar ki ekhane khaba?"
-      </div>
-
-      <div class="draft-box">
-        <div class="draft-label">✍️ Proposed Reply</div>
-        <div class="draft-text" contenteditable="true" id="reply-2">
-          "Ammu ami 8:30 tar moddhe chole ashbo. Khawa daowa bashei korbo!"
-        </div>
-      </div>
-
-      <div class="action-row">
-        <button class="btn-action btn-approve" onclick="approveReply('card-2', 'Ammu ❤️')">
-          ✅ Approve & Send
-        </button>
-        <button class="btn-action btn-dismiss" onclick="dismissReply('card-2')">
-          ❌ Dismiss
-        </button>
-      </div>
-    </div>
-
-    <!-- Card 3: Casual / Routine Thread -->
-    <div class="thread-card" data-priority="low" id="card-3">
-      <div class="thread-header">
-        <div class="contact-info">
-          <div class="avatar" style="background: #059669;">
-            RH
-            <div class="avatar-badge"></div>
-          </div>
-          <div>
-            <div class="contact-name">Rafiqul Hasan</div>
-            <div class="contact-time">1 hr ago &bull; Casual</div>
-          </div>
-        </div>
-        <div class="urgency-badge urgency-low">💬 Routine</div>
-      </div>
-
-      <div class="message-bubble">
-        "Mama oi funny reel ta dekhso? Link send korsi haha"
-      </div>
-
-      <div class="draft-box">
-        <div class="draft-label">✍️ Proposed Reply</div>
-        <div class="draft-text" contenteditable="true" id="reply-3">
-          "Hahaha dekhsi, shera chilo bhai 😂"
-        </div>
-      </div>
-
-      <div class="action-row">
-        <button class="btn-action btn-approve" onclick="approveReply('card-3', 'Rafiqul Hasan')">
-          ✅ Approve & Send
-        </button>
-        <button class="btn-action btn-dismiss" onclick="dismissReply('card-3')">
-          ❌ Dismiss
-        </button>
-      </div>
-    </div>
-
+    <div id="cardsList" style="display: flex; flex-direction: column; gap: 12px;"></div>
   </div>
 
-  <!-- Bottom Navigation Bar -->
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="switchNav(this)">
       <span class="nav-icon">📬</span>
       <span>Triage</span>
     </button>
-    <button class="nav-item" onclick="switchNav(this); showToast('VIP List: Tanvir Zaman, Ammu, Close Friends')">
+    <button class="nav-item" onclick="switchNav(this); showToast('VIP List: Marketplace, Close Friends, Family')">
       <span class="nav-icon">⭐</span>
       <span>VIP Rules</span>
     </button>
-    <button class="nav-item" onclick="switchNav(this); showToast('Next automated cron run in 18 minutes')">
+    <button class="nav-item" onclick="switchNav(this); showToast('Cron monitoring active every 30m')">
       <span class="nav-icon">⚙️</span>
       <span>Schedule</span>
     </button>
   </nav>
 
   <script>
-    // Initialize Telegram WebApp
     const tg = window.Telegram?.WebApp;
     if (tg) {
       tg.ready();
@@ -617,21 +523,105 @@
       }, 2400);
     }
 
-    function triggerScan() {
-      const btn = document.getElementById('scanBtn');
-      haptic('medium');
-      btn.classList.add('scanning');
-      btn.innerHTML = '<span>⏳</span> <span>Checking...</span>';
+    let allThreads = [];
+    let currentFilter = 'all';
 
-      setTimeout(() => {
-        btn.classList.remove('scanning');
-        btn.innerHTML = '<span>🔄</span> <span>Scan Now</span>';
-        haptic('success');
-        showToast('✅ Messenger inbox up to date!');
-      }, 1200);
+    async function loadData() {
+      try {
+        const res = await fetch('./data.json?t=' + Date.now());
+        if (!res.ok) throw new Error('Data not found');
+        const data = await res.json();
+        allThreads = data.threads || [];
+        renderFeed(allThreads);
+      } catch (err) {
+        console.log('Using default state:', err);
+        renderFeed([]);
+      }
     }
 
-    function approveReply(cardId, name) {
+    function renderFeed(threads) {
+      const container = document.getElementById('cardsList');
+      container.innerHTML = '';
+
+      let urgentCount = 0;
+      let draftedCount = 0;
+
+      threads.forEach(t => {
+        if (t.urgency === 'high') urgentCount++;
+        if (t.proposed_reply) draftedCount++;
+      });
+
+      document.getElementById('stat-urgent').innerText = urgentCount;
+      document.getElementById('stat-drafted').innerText = draftedCount;
+
+      const filtered = threads.filter(t => currentFilter === 'all' || t.urgency === currentFilter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🎉</div>
+            <div class="empty-title">All Caught Up!</div>
+            <div class="empty-desc">No unread priority messages in your Facebook Messenger right now. Background checks run every 30m.</div>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach((item, idx) => {
+        const initials = (item.contact_name || 'U').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+        const badgeClass = item.urgency === 'high' ? 'urgency-high' : (item.urgency === 'med' ? 'urgency-med' : 'urgency-low');
+        const badgeLabel = item.urgency === 'high' ? '🚨 High' : (item.urgency === 'med' ? '⚠️ Medium' : '💬 Routine');
+
+        const card = document.createElement('div');
+        card.className = 'thread-card';
+        card.id = `card-${idx}`;
+        card.innerHTML = `
+          <div class="thread-header">
+            <div class="contact-info">
+              <div class="avatar">
+                ${initials}
+                <div class="avatar-badge"></div>
+              </div>
+              <div>
+                <div class="contact-name">${item.contact_name || 'Contact'}</div>
+                <div class="contact-time">${item.timestamp || 'Recent'}</div>
+              </div>
+            </div>
+            <div class="urgency-badge ${badgeClass}">${badgeLabel}</div>
+          </div>
+
+          <div class="message-bubble">
+            "${item.snippet || 'New message'}"
+          </div>
+
+          ${item.proposed_reply ? `
+            <div class="draft-box">
+              <div class="draft-label">✍️ Proposed Reply</div>
+              <div class="draft-text" contenteditable="true">
+                ${item.proposed_reply}
+              </div>
+            </div>
+            <div class="action-row">
+              <button class="btn-action btn-approve" onclick="approveCard('card-${idx}', '${item.contact_name}')">
+                ✅ Approve & Send
+              </button>
+              <button class="btn-action btn-dismiss" onclick="dismissCard('card-${idx}')">
+                ❌ Dismiss
+              </button>
+            </div>
+          ` : `
+            <div class="action-row">
+              <button class="btn-action btn-dismiss" onclick="dismissCard('card-${idx}')">
+                Mark as Read
+              </button>
+            </div>
+          `}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function approveCard(cardId, name) {
       haptic('success');
       const card = document.getElementById(cardId);
       card.style.opacity = '0.3';
@@ -642,7 +632,7 @@
       }, 400);
     }
 
-    function dismissReply(cardId) {
+    function dismissCard(cardId) {
       haptic('light');
       const card = document.getElementById(cardId);
       card.style.transform = 'translateX(60px)';
@@ -657,15 +647,8 @@
       haptic('light');
       document.querySelectorAll('.tab-chip').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
-
-      const cards = document.querySelectorAll('.thread-card');
-      cards.forEach(card => {
-        if (type === 'all' || card.dataset.priority === type) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+      currentFilter = type;
+      renderFeed(allThreads);
     }
 
     function switchNav(el) {
@@ -673,6 +656,23 @@
       document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
       el.classList.add('active');
     }
+
+    function triggerScan() {
+      const btn = document.getElementById('scanBtn');
+      haptic('medium');
+      btn.classList.add('scanning');
+      btn.innerHTML = '<span>⏳</span> <span>Scanning...</span>';
+
+      setTimeout(async () => {
+        await loadData();
+        btn.classList.remove('scanning');
+        btn.innerHTML = '<span>🔄</span> <span>Scan Now</span>';
+        haptic('success');
+        showToast('✅ Inbox up to date!');
+      }, 1200);
+    }
+
+    loadData();
   </script>
 </body>
 </html>
